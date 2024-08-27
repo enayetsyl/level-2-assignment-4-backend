@@ -81,9 +81,22 @@ const productUpdateValidationSchema = z.object({
   })
    
 });
+const orderValidationSchema = z.object({
+  body: z.object({
+    _id: z
+    .string({
+      invalid_type_error: '_id must be string',
+    }),
+  quantity: z
+    .number()
+    .int({message: "Quantity should be whole number."})
+    .positive({message: "Quantity can not be negative."}).optional(),
+    })
+   
+});
 
 // You can read my following blog to get deeper understanding about creating different types of zod validation https://dev.to/md_enayeturrahman_2560e3/how-to-create-api-in-an-industry-standard-app-44ck
 
 export const ProductValidation = {
-  productValidationSchema,productUpdateValidationSchema
+  productValidationSchema,productUpdateValidationSchema,orderValidationSchema
 };

@@ -24,10 +24,21 @@ router.get(
   '/get-all-products',
   ProductControllers.getAllProducts
 )
+router.get(
+  '/get-single-product/:id',
+  ProductControllers.getSingleProduct
+)
 
 router.delete(
   '/delete/:id',
     ProductControllers.deleteProduct
+)
+
+router.post(
+  '/order',
+   // validateRequest(ProductValidation.orderValidationSchema),
+  ProductControllers.orderProducts
+
 )
 
 //Todo. Create get, post, put, patch, delete etc route as par your requirement. You can read my following blog to get deeper understanding about creating different types of route https://dev.to/md_enayeturrahman_2560e3/how-to-create-api-in-an-industry-standard-app-44ck

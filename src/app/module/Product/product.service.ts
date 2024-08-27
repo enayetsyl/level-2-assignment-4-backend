@@ -3,11 +3,6 @@
 import { TProduct } from './product.interface';
 import { Product } from './product.model';
 
-// Todo. Create your own service function to write the business logic. 
-
-//You can read my following blog to get deeper understanding about creating different types of service function https://dev.to/md_enayeturrahman_2560e3/how-to-create-api-in-an-industry-standard-app-44ck
-
-
 const createProductIntoDB = async (name: string, brand: string, quantity: number, price: number, rating: string, image:string, description: string) => {
   const newProduct = new Product({
     name,
@@ -22,6 +17,38 @@ const createProductIntoDB = async (name: string, brand: string, quantity: number
   const savedProduct = await newProduct.save();
 
 };
+const createOrderIntoDB = async (items) => {
+  const updateResults = [];
+
+  // First, check if all items have sufficient stock
+  for (const item of items) {
+    const product = await Product.findById(item.productId);
+
+    if (!product) {
+      console.error(`Product with id ${item.productId} not found`);
+      return { success: false, message: `Product with id ${item.productId} not found` };
+    }
+
+    if (product.quantity < item.quantity) {
+      console.error(`Not enough stock for product ${product.name}`);
+      return { success: false, message: `Not enough stock for product ${product.name}` };
+    }
+  }
+
+  // If all items have sufficient stock, proceed to update
+  for (const item of items) {
+    const result = await Product.findByIdAndUpdate(item.productId, {
+      $inc: { quantity: -item.quantity },
+    }, { new: true });
+
+    updateResults.push(result);
+  }
+
+  return { success: true, updateResults };
+};
+
+
+
 
 const getProductsFromDB = async () => {
   
@@ -47,7 +74,17 @@ const updateProductIntoDB = async (id : string, payload: Partial<TProduct>) => {
   return result;
  
 };
+const getProductFromDB = async (id : string) => {
+  const result = await Product.findById(id)
+
+  if (!result) {
+    throw new Error('Product not found');
+  }
+
+  return result;
+ 
+};
 
 export const ProductServices = {
-  createProductIntoDB, getProductsFromDB, deleteProductFromDB, updateProductIntoDB
+  createProductIntoDB, getProductsFromDB, deleteProductFromDB, updateProductIntoDB, getProductFromDB, createOrderIntoDB
 };

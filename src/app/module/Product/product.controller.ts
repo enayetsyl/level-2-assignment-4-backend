@@ -7,16 +7,29 @@ import { ProductServices } from './product.service';
 const createProduct = catchAsync(async (req, res) => {
   const { name, brand, quantity, price, rating, image, description, } = req.body;  
   
-  
   const result = await ProductServices.createProductIntoDB(
     name, brand, quantity, price, rating, image, description
   );
 
-  // Below you can see the use of custom sendResponse function to make the code base clean. 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Product created successfully',
+    data: result,
+  });
+});
+const orderProducts = catchAsync(async (req, res) => {
+  // const { items } = req.body;  
+  // console.log('items', items)
+  // console.log('req.body', req.body)
+  const result = await ProductServices.createOrderIntoDB(
+    req.body
+  );
+  console.log('result',result)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Order Placed successfully',
     data: result,
   });
 });
@@ -25,9 +38,6 @@ const getAllProducts = catchAsync(async (req, res) => {
   
   const result = await ProductServices.getProductsFromDB();
 
-  console.log('results', result)
-
-  // Below you can see the use of custom sendResponse function to make the code base clean. 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -41,10 +51,7 @@ const deleteProduct = catchAsync(async (req, res) => {
   const {id} = req.params
   console.log('id', id)
   const result = await ProductServices.deleteProductFromDB(id);
-
-  console.log('results', result)
-
-  // Below you can see the use of custom sendResponse function to make the code base clean. 
+ 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -59,9 +66,6 @@ const updateProduct = catchAsync(async (req, res) => {
   const payload = req.body;
   const result = await ProductServices.updateProductIntoDB(id, payload);
 
-  console.log('results', result)
-
-  // Below you can see the use of custom sendResponse function to make the code base clean. 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -69,9 +73,22 @@ const updateProduct = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getSingleProduct = catchAsync(async (req, res) => {
+  
+  const {id} = req.params
+
+  const result = await ProductServices.getProductFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product fetched successfully',
+    data: result,
+  });
+});
 
 
 
 export const ProductControllers = {
-  createProduct, getAllProducts, deleteProduct, updateProduct
+  createProduct, getAllProducts, deleteProduct, updateProduct, getSingleProduct, orderProducts
  };
