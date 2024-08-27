@@ -85,6 +85,10 @@ const getProductFromDB = async (id : string) => {
  
 };
 
+const getFilteredAndSortedProducts = async (filters: any, sortOptions: any) => {
+  return await Product.find(filters).sort(sortOptions);
+};
+
 export const ProductServices = {
-  createProductIntoDB, getProductsFromDB, deleteProductFromDB, updateProductIntoDB, getProductFromDB, createOrderIntoDB
+  createProductIntoDB, getProductsFromDB, deleteProductFromDB, updateProductIntoDB, getProductFromDB, createOrderIntoDB,  getFilteredAndSortedProducts
 };

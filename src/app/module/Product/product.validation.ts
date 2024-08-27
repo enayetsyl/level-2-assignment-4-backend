@@ -95,7 +95,7 @@ const orderValidationSchema = z.object({
    
 });
 
-// You can read my following blog to get deeper understanding about creating different types of zod validation https://dev.to/md_enayeturrahman_2560e3/how-to-create-api-in-an-industry-standard-app-44ck
+
 
 export const ProductValidation = {
   productValidationSchema,productUpdateValidationSchema,orderValidationSchema

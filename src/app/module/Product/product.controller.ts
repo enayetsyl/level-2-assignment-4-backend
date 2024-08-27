@@ -19,9 +19,7 @@ const createProduct = catchAsync(async (req, res) => {
   });
 });
 const orderProducts = catchAsync(async (req, res) => {
-  // const { items } = req.body;  
-  // console.log('items', items)
-  // console.log('req.body', req.body)
+
   const result = await ProductServices.createOrderIntoDB(
     req.body
   );
@@ -34,9 +32,35 @@ const orderProducts = catchAsync(async (req, res) => {
   });
 });
 
-const getAllProducts = catchAsync(async (req, res) => {
-  
-  const result = await ProductServices.getProductsFromDB();
+const getAllProducts = catchAsync(async (req: Request, res: Response) => {
+  const { search, sort, minPrice, maxPrice } = req.query;
+
+  const filters: any = {};
+
+  // Search by name, brand, or description
+  if (search) {
+    const searchRegex = new RegExp(search as string, 'i');
+    filters.$or = [
+      { name: searchRegex },
+      { brand: searchRegex },
+      { description: searchRegex },
+    ];
+  }
+
+  // Filter by price range
+  if (minPrice && maxPrice) {
+    filters.price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
+  }
+
+  // Sorting by price
+  let sortOptions = {};
+  if (sort === 'lowToHigh') {
+    sortOptions = { price: 1 };
+  } else if (sort === 'highToLow') {
+    sortOptions = { price: -1 };
+  }
+
+  const result = await ProductServices.getFilteredAndSortedProducts(filters, sortOptions);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -45,6 +69,7 @@ const getAllProducts = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
 
 const deleteProduct = catchAsync(async (req, res) => {
   
