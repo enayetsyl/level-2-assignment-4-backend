@@ -17,11 +17,11 @@ const app = (0, express_1.default)();
 //parsers
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)({ origin: ['http://localhost:5173'], credentials: true }));
+app.use((0, cors_1.default)({ origin: ['http://localhost:5173', 'https://level-2-assignment-4-livid.vercel.app'], credentials: true }));
 // application routes
 app.use('/api/v1', routes_1.default); // /api/v1 will prefix all the route. This is the connection with the index.ts file inside the routes folder. 
 app.get('/', (req, res) => {
-    res.send('Hello from boiler plate code');
+    res.send('Hello from Assignment 4 backend code');
 });
 app.use(globalErrorhandler_1.default); // This is connected with the globalErrorhandler.ts file at the middleware folder.
 //Not Found
