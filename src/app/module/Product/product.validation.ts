@@ -41,8 +41,9 @@ const productValidationSchema = z.object({
   })
    
 });
+
 const productUpdateValidationSchema = z.object({
-  body: z.object({
+  
     name: z
     .string({
       invalid_type_error: 'Name must be string',
@@ -78,9 +79,10 @@ const productUpdateValidationSchema = z.object({
   price: z
     .number()
     .positive({message: "Price can not be negative."}).optional(),
-  })
+
    
 });
+
 const orderValidationSchema = z.object({
   body: z.object({
     _id: z

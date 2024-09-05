@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { OrderItem } from '../../interface/order';
 import { TProduct } from './product.interface';
 import { Product } from './product.model';
 
@@ -17,7 +18,8 @@ const createProductIntoDB = async (name: string, brand: string, quantity: number
   const savedProduct = await newProduct.save();
 
 };
-const createOrderIntoDB = async (items) => {
+
+const createOrderIntoDB = async (items: OrderItem[]) => {
   const updateResults = [];
 
   // First, check if all items have sufficient stock
@@ -57,6 +59,7 @@ const getProductsFromDB = async () => {
   return fetchedProduct
  
 };
+
 const deleteProductFromDB = async (id: string) => {
   
   const deletedProduct = await Product.findByIdAndDelete(id);
@@ -64,6 +67,7 @@ const deleteProductFromDB = async (id: string) => {
   return deletedProduct
  
 };
+
 const updateProductIntoDB = async (id : string, payload: Partial<TProduct>) => {
   const result = await Product.findByIdAndUpdate(id, payload, {new: true})
 
@@ -74,6 +78,7 @@ const updateProductIntoDB = async (id : string, payload: Partial<TProduct>) => {
   return result;
  
 };
+
 const getProductFromDB = async (id : string) => {
   const result = await Product.findById(id)
 
